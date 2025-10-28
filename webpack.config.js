@@ -53,7 +53,22 @@ module.exports = {
   ],
   optimization: {
     splitChunks: {
-      chunks: 'all'
+      chunks: 'all',
+      cacheGroups: {
+        // Disable code splitting for content script to ensure it loads immediately
+        content: {
+          test: /[\\/]src[\\/]content[\\/]/,
+          name: 'content',
+          chunks: 'all',
+          enforce: true
+        },
+        // Keep code splitting for other entries
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true
+        }
+      }
     }
   }
 };

@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import { RegisterProps } from '../types/sidebar';
+
+interface RegisterProps {
+  onRegister: (name: string, email: string, password: string, confirmPassword: string) => Promise<void>;
+  onBackToLogin: () => void;
+}
 
 const Register: React.FC<RegisterProps> = ({ onRegister, onBackToLogin }) => {
   const [name, setName] = useState('');

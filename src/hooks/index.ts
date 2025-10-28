@@ -1,2 +1,2 @@
-export { useSidebarState } from './useSidebarState';
-export { useSidebarActions } from './useSidebarActions';
+export { useSidebarSocket } from './useSidebarSocket';
+export type { SocketMessage, AuthResponse } from './useSidebarSocket';

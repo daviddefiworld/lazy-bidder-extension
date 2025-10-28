@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import { LoginProps } from '../types/sidebar';
+
+interface LoginProps {
+  onLogin: (email: string, password: string) => Promise<void>;
+  onRegister: () => void;
+}
 
 const Login: React.FC<LoginProps> = ({ onLogin, onRegister }) => {
   const [email, setEmail] = useState('');

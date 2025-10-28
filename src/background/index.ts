@@ -1,33 +1,21 @@
-const tabUrls = new Map<number, string>();
+// Background script - minimal: only handles essential Chrome APIs
 
-const getExtensionId = async (): Promise<string> => {
-  return new Promise((resolve) => {
-    chrome.storage.local.get(['extensionInstanceId'], (result) => {
-      if (result.extensionInstanceId) {
-        resolve(result.extensionInstanceId);
-      } else {
-        const id = `ext_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-        chrome.storage.local.set({ extensionInstanceId: id }, () => resolve(id));
-      }
-    });
-  });
-};
-
-chrome.runtime.onInstalled.addListener(async () => {
-  await getExtensionId();
-  chrome.storage.sync.set({ isActive: false });
+chrome.runtime.onInstalled.addListener(() => {
+  // isRunning is now stored in DB, no need for chrome.storage
 });
 
+// Handle messages
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   const { action } = message;
   
-  if (action === 'getState') {
-    chrome.storage.sync.get(['isActive'], (result) => {
-      sendResponse({ isActive: result.isActive || false });
-    });
+  // Handle ping from content script
+  if (action === 'ping') {
+    console.log('Background script received ping from content script');
+    sendResponse({ success: true, message: 'Background script is available' });
     return true;
   }
   
+  // Handle URL navigation requests from sidebar
   if (action === 'changeUrl') {
     if (message.tabId && message.url) {
       chrome.tabs.update(message.tabId, { url: message.url }, (tab) => {
@@ -41,56 +29,45 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
   
-  if (action === 'getExtensionId') {
-    getExtensionId().then(extensionId => sendResponse({ extensionId }));
-    return true;
-  }
-  
-  if (action === 'activation_command') {
-    chrome.storage.sync.set({ isActive: message.isActive }, () => {
-      chrome.tabs.query({}, (tabs) => {
-        tabs.forEach(tab => {
-          if (tab.id) {
-            chrome.tabs.sendMessage(tab.id, { 
-              action: 'activation_command', 
-              isActive: message.isActive 
-            }).catch(() => {});
-          }
-        });
-      });
-      sendResponse({ success: true, isActive: message.isActive });
-    });
-    return true;
+  // Forward URL changes from content script to sidebar
+  if (action === 'sendUrlChange') {
+    chrome.runtime.sendMessage({
+      action: 'urlChange',
+      data: message.data
+    }).catch(() => {});
+    return false;
   }
 });
 
-const sendUrlChange = async (tabId: number, url: string, title?: string) => {
-  const extensionId = await getExtensionId();
-  chrome.runtime.sendMessage({
-    action: 'urlChange',
-    data: {
-      url,
-      previousUrl: tabUrls.get(tabId) || '',
-      tabId,
-      timestamp: Date.now(),
-      extensionId,
-      title,
-      type: 'tab_change'
-    }
-  });
-  tabUrls.set(tabId, url);
-};
-
+// Track URL changes and forward to sidebar
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   if (changeInfo.url && tab.url) {
-    await sendUrlChange(tabId, changeInfo.url, tab.title);
+    chrome.runtime.sendMessage({
+      action: 'urlChange',
+      data: {
+        url: changeInfo.url,
+        tabId,
+        timestamp: Date.now(),
+        title: tab.title,
+        type: 'tab_change'
+      }
+    }).catch(() => {});
   }
 });
 
 chrome.tabs.onActivated.addListener(async ({ tabId }) => {
   const tab = await chrome.tabs.get(tabId);
   if (tab.url) {
-    await sendUrlChange(tabId, tab.url, tab.title);
+    chrome.runtime.sendMessage({
+      action: 'urlChange',
+      data: {
+        url: tab.url,
+        tabId,
+        timestamp: Date.now(),
+        title: tab.title,
+        type: 'tab_change'
+      }
+    }).catch(() => {});
   }
 });
 
@@ -99,5 +76,3 @@ chrome.action.onClicked.addListener(async (tab) => {
     await chrome.sidePanel.open({ tabId: tab.id });
   }
 });
-
-chrome.tabs.onRemoved.addListener((tabId) => tabUrls.delete(tabId));

@@ -10,7 +10,8 @@
     "activeTab",
     "storage",
     "tabs",
-    "sidePanel"
+    "sidePanel",
+    "scripting"
   ],
   "action": {
     "default_title": "LazyBidder"
@@ -22,7 +23,8 @@
     {
       "matches": ["<all_urls>"],
       "js": ["content.js"],
-      "css": ["content.css"]
+      "css": ["content.css"],
+      "run_at": "document_end"
     }
   ],
   "background": {
