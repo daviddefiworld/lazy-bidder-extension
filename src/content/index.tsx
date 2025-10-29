@@ -1,7 +1,7 @@
 import { actionExecutor } from '../services/actionExecutor';
 import './content.css';
 
-// Simple notification widget
+// Minimal notification widget
 class LazyBidderNotification {
   private container: HTMLElement | null = null;
   public isVisible: boolean = false;
@@ -18,20 +18,13 @@ class LazyBidderNotification {
       existing.remove();
     }
 
-    // Create notification container
+    // Create minimal notification container
     this.container = document.createElement('div');
     this.container.id = 'lazybidder-notification';
     this.container.innerHTML = `
       <div class="lazybidder-widget">
-        <div class="lazybidder-header">
-          <span class="lazybidder-icon">🚀</span>
-          <span class="lazybidder-title">LazyBidder Active</span>
-          <div class="lazybidder-status" id="lazybidder-status">●</div>
-        </div>
-        <div class="lazybidder-info">
-          <div class="lazybidder-url" id="lazybidder-url">${window.location.href}</div>
-          <div class="lazybidder-time" id="lazybidder-time">${new Date().toLocaleTimeString()}</div>
-        </div>
+        <div class="lazybidder-status" id="lazybidder-status">●</div>
+        <span class="lazybidder-title">LazyBidder</span>
       </div>
     `;
 
@@ -57,13 +50,6 @@ class LazyBidderNotification {
     if (statusElement) {
       statusElement.textContent = connected ? '●' : '○';
       statusElement.className = `lazybidder-status ${connected ? 'connected' : 'disconnected'}`;
-    }
-  }
-
-  public updateUrl(url: string): void {
-    const urlElement = document.getElementById('lazybidder-url');
-    if (urlElement) {
-      urlElement.textContent = url.length > 50 ? `${url.substring(0, 50)}...` : url;
     }
   }
 }
@@ -125,11 +111,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true; // Keep channel open for async response
   }
 
-  // Handle URL change notifications
-  if (message.action === 'urlChanged') {
-    console.log('LazyBidder: URL changed:', message.url);
-    notification?.updateUrl(message.url);
-  }
 
   // Handle show/hide notification
   if (message.action === 'toggleNotification') {
@@ -155,9 +136,6 @@ const handleUrlChange = (): void => {
   if (newUrl !== currentUrl) {
     console.log('LazyBidder: URL changed within page:', newUrl);
     currentUrl = newUrl;
-    
-    // Update notification
-    notification?.updateUrl(newUrl);
     
     // Send URL change to background script
     chrome.runtime.sendMessage({
