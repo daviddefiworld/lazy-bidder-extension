@@ -1,10 +1,10 @@
 # LazyBidder Chrome Extension
 
-A Chrome extension built with React, TypeScript, and Tailwind CSS.
+A Chrome extension built with React, TypeScript, and Tailwind CSS (Manifest V3, **side panel** UI).
 
 ## Features
 
-- Modern React-based sidebar interface
+- React-based **side panel** (`SidebarPage`) for status and socket-backed activity
 - Content script integration
 - Background service worker
 - Tailwind CSS for styling
@@ -21,19 +21,22 @@ A Chrome extension built with React, TypeScript, and Tailwind CSS.
 ### Setup
 
 1. Install dependencies:
-```bash
-npm install
-```
+
+   ```bash
+   npm install
+   ```
 
 2. Start development mode:
-```bash
-npm run dev
-```
+
+   ```bash
+   npm run dev
+   ```
 
 3. Build for production:
-```bash
-npm run build
-```
+
+   ```bash
+   npm run build
+   ```
 
 ### Loading the Extension
 
@@ -44,14 +47,17 @@ npm run build
 
 ## Project Structure
 
-```
+```text
 src/
-├── sidebar/         # Extension sidebar interface
-├── content/         # Content script for web pages
-└── background/      # Background service worker
+├── sidebar/         # Side panel UI
+├── hooks/           # useSidebarSocket (Socket.io + URL sync)
+├── components/      # ControlPanel and other UI (optional wiring)
+├── content/         # Content scripts for web pages
+├── background/      # Service worker (tabs, message bridge)
+└── services/        # Action execution helpers
 
 public/
-└── manifest.json    # Extension manifest
+└── manifest.json    # Extension manifest (side_panel, permissions)
 ```
 
 ## Scripts
@@ -66,4 +72,5 @@ public/
 - TypeScript
 - Tailwind CSS
 - Webpack 5
+- Socket.io client (real-time backend connection from the side panel)
 - Chrome Extension Manifest V3

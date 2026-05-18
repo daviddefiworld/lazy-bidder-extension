@@ -238,6 +238,37 @@
   @apply space-y-4;
 }
 
+.sidebar-action-quick-grid {
+  @apply flex flex-wrap gap-2 mb-2;
+}
+
+.sidebar-action-quick-btn {
+  @apply inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium rounded-lg border border-gray-200;
+  @apply bg-white text-gray-800 hover:bg-gray-50 hover:border-blue-300;
+  @apply transition-colors cursor-pointer;
+}
+
+.sidebar-action-quick-btn-active {
+  @apply border-blue-500 bg-blue-50 text-blue-900;
+}
+
+.sidebar-tabs {
+  @apply flex border-b border-gray-200 bg-gray-50 shrink-0;
+}
+
+.sidebar-tab {
+  @apply flex-1 px-3 py-2.5 text-sm font-medium text-gray-600 border-b-2 border-transparent -mb-px cursor-pointer;
+  @apply hover:text-gray-900;
+}
+
+.sidebar-tab-active {
+  @apply text-blue-700 border-blue-600 bg-white;
+}
+
+.sidebar-tab-panel {
+  @apply flex-1 overflow-y-auto min-h-0;
+}
+
 .sidebar-action-field {
   @apply space-y-2;
 }
