@@ -58,9 +58,28 @@ function parseStreamBody(body: string): GrokStreamChunk[] {
   const events: GrokStreamChunk[] = [];
   let depth = 0;
   let start = -1;
+  let inString = false;
+  let escaped = false;
 
   for (let i = 0; i < body.length; i++) {
     const ch = body[i];
+
+    if (escaped) {
+      escaped = false;
+      continue;
+    }
+
+    if (inString) {
+      if (ch === '\\') escaped = true;
+      else if (ch === '"') inString = false;
+      continue;
+    }
+
+    if (ch === '"') {
+      inString = true;
+      continue;
+    }
+
     if (ch === '{') {
       if (depth === 0) start = i;
       depth += 1;
