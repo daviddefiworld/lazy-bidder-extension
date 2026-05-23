@@ -1,26 +1,22 @@
-// Background script — tab navigation for Indeed orders
-
-import { isInjectIndeedPageHookMessage } from '../types/messages';
+import {
+  handleIndeedBackgroundMessage,
+  isInjectIndeedPageHookMessage
+} from '../skills/indeed/indeedShared';
+import {
+  handleGrokBackgroundMessage,
+  isInjectGrokPageHookMessage
+} from '../skills/grok/grokShared';
 
 chrome.runtime.onInstalled.addListener(() => {});
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (isInjectIndeedPageHookMessage(message)) {
-    chrome.scripting
-      .executeScript({
-        target: { tabId: message.tabId },
-        world: 'MAIN',
-        files: ['indeedPageHook.js']
-      })
-      .then(() => {
-        sendResponse({ ok: true });
-      })
-      .catch((err: unknown) => {
-        sendResponse({
-          ok: false,
-          error: err instanceof Error ? err.message : String(err)
-        });
-      });
+    handleIndeedBackgroundMessage(message, sendResponse);
+    return true;
+  }
+
+  if (isInjectGrokPageHookMessage(message)) {
+    handleGrokBackgroundMessage(message, sendResponse);
     return true;
   }
 

@@ -5,6 +5,7 @@ A Chrome extension built with React, TypeScript, and Tailwind CSS (Manifest V3, 
 ## Features
 
 - React-based **side panel** (`SidebarPage`) for status and socket-backed activity
+- **Backend URL + API key** via `ConnectionSettingsStore` → `chrome.storage.local` (Socket `auth.apiKey`, same `lbk_…` as REST)
 - Content script integration
 - Background service worker
 - Tailwind CSS for styling

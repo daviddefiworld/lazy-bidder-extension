@@ -1,8 +1,13 @@
 import { saveCheckpoint, removeCheckpoint, loadCheckpoint } from '../../orders/checkpointStorage';
 import type { OrderCheckpoint } from '../../orders/types';
 import { actionCoordinator } from '../../utils/actionCoordinator';
-import { buildIndeedSearchUrl } from './indeedSkill';
-import type { ActiveIndeedOrder, IndeedOrderParams } from './types';
+import { buildIndeedSearchUrl, INDEED_ACTION } from './indeedShared';
+import type {
+  ActiveIndeedOrder,
+  IndeedOrderParams,
+  ProcessIndeedPagePayload,
+  ProcessIndeedPageResult
+} from './types';
 
 const SESSION_KEY = 'activeIndeedOrder';
 
@@ -15,7 +20,11 @@ export type IndeedRunnerCallbacks = {
     error?: string;
     completedAt?: string;
   }) => void;
-  onOrderChange: (order: ActiveIndeedOrder | null, phase: 'running' | 'stopped' | 'completed', error?: string) => void;
+  onOrderChange: (
+    order: ActiveIndeedOrder | null,
+    phase: 'running' | 'stopped' | 'completed',
+    error?: string
+  ) => void;
 };
 
 export class IndeedOrderRunner {
@@ -26,10 +35,6 @@ export class IndeedOrderRunner {
 
   getActiveOrder(): ActiveIndeedOrder | null {
     return this.active;
-  }
-
-  isProcessing(): boolean {
-    return this.processingPage;
   }
 
   async restoreSession(): Promise<void> {
@@ -94,7 +99,6 @@ export class IndeedOrderRunner {
     await saveCheckpoint(checkpoint);
     this.active = null;
     await this.persistSession();
-
     this.callbacks.onOrderChange(null, 'stopped', reason);
 
     const extId = await this.callbacks.getExtensionId();
@@ -116,7 +120,6 @@ export class IndeedOrderRunner {
     await removeCheckpoint(orderId);
     this.active = null;
     await this.persistSession();
-
     this.callbacks.onOrderChange(null, 'completed', reason);
 
     const extId = await this.callbacks.getExtensionId();
@@ -139,7 +142,6 @@ export class IndeedOrderRunner {
     await removeCheckpoint(orderId);
     this.active = null;
     await this.persistSession();
-
     this.callbacks.onOrderChange(null, 'completed');
 
     const extId = await this.callbacks.getExtensionId();
@@ -249,17 +251,21 @@ export class IndeedOrderRunner {
     try {
       await actionCoordinator.waitForTabReady(order.tabId);
 
-      const result = await actionCoordinator.dispatchProcessIndeedPage(order.tabId, {
-        params: {
-          orderId: order.orderId,
-          query: order.query,
-          location: order.location,
-          sort: order.sort,
-          fromage: order.fromage
-        },
-        totals: { jobsFound: order.jobsFound, jobsScraped: order.jobsScraped },
-        resumeAfterJobId: order.lastJobId
-      });
+      const result = await actionCoordinator.dispatch<ProcessIndeedPageResult>(
+        order.tabId,
+        INDEED_ACTION,
+        {
+          params: {
+            orderId: order.orderId,
+            query: order.query,
+            location: order.location,
+            sort: order.sort,
+            fromage: order.fromage
+          },
+          totals: { jobsFound: order.jobsFound, jobsScraped: order.jobsScraped },
+          resumeAfterJobId: order.lastJobId
+        } satisfies ProcessIndeedPagePayload
+      );
 
       order.jobsFound = result.totals.jobsFound;
       order.jobsScraped = result.totals.jobsScraped;
@@ -277,9 +283,7 @@ export class IndeedOrderRunner {
       }
     } catch (error) {
       const msg = error instanceof Error ? error.message : String(error);
-      if (msg === 'Order stopped' || msg === 'Cancelled') {
-        return;
-      }
+      if (msg === 'Order stopped' || msg === 'Cancelled') return;
       await this.stop(msg);
     } finally {
       this.processingPage = false;
@@ -293,9 +297,7 @@ export class IndeedOrderRunner {
       return indeedTabs[0].id;
     }
     const tab = await chrome.tabs.create({ url, active: true });
-    if (!tab.id) {
-      throw new Error('Failed to open Indeed tab');
-    }
+    if (!tab.id) throw new Error('Failed to open Indeed tab');
     return tab.id;
   }
 }

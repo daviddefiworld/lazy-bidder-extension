@@ -47,27 +47,24 @@ module.exports = {
     }),
     new CopyWebpackPlugin({
       patterns: [
-        { from: 'public', to: '.' }
+        { from: 'public', to: '.' },
+        { from: 'src/skills/indeed/pageHook.js', to: 'indeed/pageHook.js' },
+        { from: 'src/skills/grok/pageHook.js', to: 'grok/pageHook.js' }
       ]
     })
   ],
   optimization: {
     splitChunks: {
-      chunks: 'all',
       cacheGroups: {
-        // Disable code splitting for content script to ensure it loads immediately
+        // Bundle content script (and its deps) in one file — no shared chunks with sidebar
         content: {
           test: /[\\/]src[\\/]content[\\/]/,
           name: 'content',
-          chunks: 'all',
+          chunks: (chunk) => chunk.name === 'content',
           enforce: true
         },
-        // Keep code splitting for other entries
-        default: {
-          minChunks: 2,
-          priority: -20,
-          reuseExistingChunk: true
-        }
+        default: false,
+        defaultVendors: false
       }
     }
   }

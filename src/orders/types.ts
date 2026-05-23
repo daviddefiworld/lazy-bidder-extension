@@ -14,10 +14,18 @@ export interface OrderCheckpoint {
   params: Record<string, string>;
 }
 
+export type OrderSiteKind = 'indeed' | 'grok';
+
 export interface OrderUiState {
   phase: ExtensionOrderPhase;
   orderId?: string;
+  /** Which product last drove `running` / `completed` (Indeed scrape vs Grok chat). */
+  site?: OrderSiteKind;
   jobsFound: number;
   jobsScraped: number;
+  /** Grok dashboard order: user message. */
+  grokMessage?: string;
+  /** Grok dashboard order: assistant reply (after completion). */
+  grokReply?: string;
   error?: string;
 }

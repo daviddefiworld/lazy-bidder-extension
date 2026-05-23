@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "LazyBidder Extension",
   "version": "1.1.0",
-  "description": "Indeed job scraper for LazyBidder",
+  "description": "LazyBidder: Indeed scrape and Grok orders via dashboard",
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
   },
@@ -14,7 +14,7 @@
     "sidePanel"
   ],
   "host_permissions": [
-    "*://*.indeed.com/*"
+    "<all_urls>"
   ],
   "action": {
     "default_title": "LazyBidder"
@@ -24,7 +24,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["*://*.indeed.com/*"],
+      "matches": ["<all_urls>"],
       "js": ["content.js"],
       "css": ["content.css"],
       "run_at": "document_end"

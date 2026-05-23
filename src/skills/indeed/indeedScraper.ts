@@ -1,8 +1,15 @@
-import type { IndeedOrderParams, IndeedJobResult, IndeedProgress } from './types';
-import {
-  LB_CHANNEL,
-  type InjectIndeedPageHookResponse
-} from '../../types/messages';
+import { LB_CHANNEL, type FromContentMessage } from '../../types/messages';
+import { INDEED_ACTION } from './indeedShared';
+import type {
+  IndeedJobResult,
+  IndeedOrderParams,
+  IndeedProgress,
+  InjectIndeedPageHookMessage,
+  InjectIndeedPageHookResponse,
+  ProcessIndeedPagePayload
+} from './types';
+
+export { INDEED_ACTION };
 
 const JOB_LIST_SELECTOR = 'li.css-1ac2h1w';
 const NEXT_PAGE_SELECTOR = 'a[data-testId="pagination-page-next"]';
@@ -12,61 +19,35 @@ const VIEWJOB_TIMEOUT_MS = 20_000;
 const STEP_DELAY_MIN_MS = 2_000;
 const STEP_DELAY_MAX_MS = 5_000;
 
-export function buildIndeedSearchUrl(
-  params: Pick<IndeedOrderParams, 'query' | 'location' | 'sort' | 'fromage'>,
-  start: number
-): string {
-  const q = new URLSearchParams({
-    q: params.query,
-    l: params.location,
-    sort: params.sort,
-    fromage: params.fromage,
-    start: String(start)
-  });
-  return `https://www.indeed.com/jobs?${q.toString()}`;
-}
-
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-/** Uniform random delay in [STEP_DELAY_MIN_MS, STEP_DELAY_MAX_MS] before human-like pacing. */
 function randomStepDelay(): Promise<void> {
   const span = STEP_DELAY_MAX_MS - STEP_DELAY_MIN_MS + 1;
-  const ms = STEP_DELAY_MIN_MS + Math.floor(Math.random() * span);
-  return sleep(ms);
+  return sleep(STEP_DELAY_MIN_MS + Math.floor(Math.random() * span));
 }
 
 async function waitForJobList(timeoutMs = PAGE_LOAD_TIMEOUT_MS): Promise<void> {
   const start = Date.now();
   while (Date.now() - start < timeoutMs) {
-    if (document.querySelector(JOB_LIST_SELECTOR)) {
-      return;
-    }
+    if (document.querySelector(JOB_LIST_SELECTOR)) return;
     await sleep(300);
   }
   throw new Error('Job list did not appear');
-}
-
-/** Indeed anchor ids are `sj_<jk>` or `job_<jk>`; jk is the hex key after the prefix. */
-export function jobIdToJk(jobId: string): string {
-  if (jobId.startsWith('sj_')) return jobId.slice(3);
-  if (jobId.startsWith('job_')) return jobId.slice(4);
-  return jobId;
 }
 
 function isIndeedJobId(id: string): boolean {
   return id.startsWith('sj_') || id.startsWith('job_');
 }
 
-export function collectJobIds(): string[] {
+function collectJobIds(): string[] {
   const liElements = document.querySelectorAll(JOB_LIST_SELECTOR);
   return Array.from(liElements)
     .map((li) => {
       const job = li.querySelector('a');
       if (!job) return null;
       const href = job.getAttribute('href') || '';
-      // Ensure job id exists, is valid, and href contains '/pagead'
       if (!isIndeedJobId(job.id)) return null;
       if (!href.includes('/pagead') && !href.includes('/rc/clk')) return null;
       return job.id;
@@ -74,20 +55,16 @@ export function collectJobIds(): string[] {
     .filter((id): id is string => !!id);
 }
 
-export function hasNextPage(): boolean {
+function hasNextPage(): boolean {
   return !!document.querySelector(NEXT_PAGE_SELECTOR);
 }
 
-/**
- * Patches page `fetch` in the MAIN world. DOM `<script>` injection hits Indeed's CSP;
- * `chrome.scripting` only exists on the service worker, not in content scripts.
- */
 async function installFetchHook(tabId: number): Promise<void> {
   const response = (await chrome.runtime.sendMessage({
     channel: LB_CHANNEL,
     type: 'injectIndeedPageHook',
     tabId
-  })) as InjectIndeedPageHookResponse | undefined;
+  } satisfies InjectIndeedPageHookMessage)) as InjectIndeedPageHookResponse | undefined;
   if (!response?.ok) {
     throw new Error(
       response && 'error' in response ? response.error : 'Failed to inject Indeed page hook'
@@ -123,27 +100,22 @@ function waitForViewjob(timeoutMs = VIEWJOB_TIMEOUT_MS): Promise<unknown> {
 }
 
 async function clickJobAndCapture(jobId: string): Promise<unknown> {
-
   const link = document.getElementById(jobId);
-  if (!link) {
-    throw new Error(`Job link not found: ${jobId}`);
-  }
-
+  if (!link) throw new Error(`Job link not found: ${jobId}`);
   const pending = waitForViewjob();
   link.click();
   return pending;
 }
 
-export type IndeedCallbacks = {
+type PageCallbacks = {
   onProgress: (progress: IndeedProgress) => void;
   onJobResult: (result: IndeedJobResult) => void;
 };
 
-/** Scrape all jobs on the current Indeed results page (no navigation). */
-export async function processCurrentPage(
+async function scrapeCurrentPage(
   tabId: number,
   params: IndeedOrderParams,
-  callbacks: IndeedCallbacks,
+  callbacks: PageCallbacks,
   totals: { jobsFound: number; jobsScraped: number },
   options?: { resumeAfterJobId?: string }
 ): Promise<{ hasNext: boolean; pageJobCount: number }> {
@@ -154,10 +126,9 @@ export async function processCurrentPage(
   let jobIds = collectJobIds();
   if (options?.resumeAfterJobId) {
     const idx = jobIds.indexOf(options.resumeAfterJobId);
-    if (idx >= 0) {
-      jobIds = jobIds.slice(idx + 1);
-    }
+    if (idx >= 0) jobIds = jobIds.slice(idx + 1);
   }
+
   totals.jobsFound += jobIds.length;
   callbacks.onProgress({
     orderId: params.orderId,
@@ -165,7 +136,6 @@ export async function processCurrentPage(
     jobsScraped: totals.jobsScraped
   });
 
-  console.log("jobIds", jobIds)
   for (const jobId of jobIds) {
     try {
       await randomStepDelay();
@@ -178,9 +148,68 @@ export async function processCurrentPage(
         jobsScraped: totals.jobsScraped
       });
     } catch (err) {
-      console.warn('Indeed skill: job scrape failed', jobId, err);
+      console.warn('Indeed: job scrape failed', jobId, err);
     }
   }
 
   return { hasNext: hasNextPage(), pageJobCount: jobIds.length };
+}
+
+function notifySidebar(message: FromContentMessage): void {
+  chrome.runtime.sendMessage(message).catch(() => {});
+}
+
+export async function runIndeedPageAction(
+  actionId: string,
+  payload: ProcessIndeedPagePayload,
+  tabId: number
+): Promise<void> {
+  const params = payload.params as IndeedOrderParams;
+  const totals = { ...payload.totals };
+
+  try {
+    const pageResult = await scrapeCurrentPage(
+      tabId,
+      params,
+      {
+        onProgress: (p) => {
+          notifySidebar({
+            channel: LB_CHANNEL,
+            type: 'actionProgress',
+            actionId,
+            data: p
+          });
+        },
+        onJobResult: (r) => {
+          notifySidebar({
+            channel: LB_CHANNEL,
+            type: 'actionJobResult',
+            actionId,
+            data: r
+          });
+        }
+      },
+      totals,
+      { resumeAfterJobId: payload.resumeAfterJobId }
+    );
+
+    notifySidebar({
+      channel: LB_CHANNEL,
+      type: 'actionDone',
+      actionId,
+      success: true,
+      result: {
+        hasNext: pageResult.hasNext,
+        totals: { jobsFound: totals.jobsFound, jobsScraped: totals.jobsScraped }
+      }
+    });
+  } catch (error) {
+    notifySidebar({
+      channel: LB_CHANNEL,
+      type: 'actionDone',
+      actionId,
+      success: false,
+      error: error instanceof Error ? error.message : String(error)
+    });
+  }
 }

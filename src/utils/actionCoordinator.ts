@@ -1,15 +1,12 @@
 import {
   LB_CHANNEL,
-  type ContentAction,
   type FromContentMessage,
   isFromContentMessage,
-  type ProcessIndeedPagePayload,
-  type ProcessIndeedPageResult,
   type ToContentMessage
 } from '../types/messages';
 
 type PendingEntry = {
-  resolve: (result: ProcessIndeedPageResult) => void;
+  resolve: (result: unknown) => void;
   reject: (error: Error) => void;
   timer: ReturnType<typeof setTimeout>;
 };
@@ -26,13 +23,8 @@ export type ActionJobResultHandler = (data: {
   jobDetail: unknown;
 }) => void;
 
-/** Top-level document only — avoids flaky pings from embedded Indeed iframes. */
 const MAIN_FRAME: chrome.tabs.MessageSendOptions = { frameId: 0 };
 
-/**
- * Sidebar-side coordinator: dispatch actions to content without holding the message port open.
- * Content reports completion via runtime messages with actionId.
- */
 class ActionCoordinator {
   private pending = new Map<string, PendingEntry>();
   private progressHandler: ActionProgressHandler | null = null;
@@ -81,7 +73,7 @@ class ActionCoordinator {
       entry.reject(new Error(message.error ?? 'Action failed'));
       return;
     }
-    if (!message.result) {
+    if (message.result === undefined) {
       entry.reject(new Error('Action completed without result'));
       return;
     }
@@ -96,7 +88,6 @@ class ActionCoordinator {
     entry.reject(error);
   }
 
-  /** Sync ping — short-lived port is fine. */
   pingTab(tabId: number): Promise<boolean> {
     const msg: ToContentMessage = { channel: LB_CHANNEL, type: 'ping' };
     return new Promise((resolve) => {
@@ -125,12 +116,12 @@ class ActionCoordinator {
     throw new Error('Content script not available on tab');
   }
 
-  /** Fire-and-forget dispatch; resolves when content sends actionDone. */
-  dispatchProcessIndeedPage(
+  dispatch<T = unknown>(
     tabId: number,
-    payload: ProcessIndeedPagePayload,
+    action: string,
+    payload: unknown,
     timeoutMs = 600_000
-  ): Promise<ProcessIndeedPageResult> {
+  ): Promise<T> {
     this.ensureListener();
     const actionId = crypto.randomUUID();
 
@@ -140,7 +131,7 @@ class ActionCoordinator {
       }, timeoutMs);
 
       this.pending.set(actionId, {
-        resolve,
+        resolve: resolve as (result: unknown) => void,
         reject,
         timer
       });
@@ -150,7 +141,7 @@ class ActionCoordinator {
         type: 'dispatch',
         actionId,
         tabId,
-        action: 'processIndeedPage' as ContentAction,
+        action,
         payload
       };
 

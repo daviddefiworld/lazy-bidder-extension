@@ -1,0 +1,563 @@
+{
+    "result": {
+        "conversation": {
+            "conversationId": "d19d64d7-24f2-4256-8216-d2cece4753fe",
+            "title": "New conversation",
+            "starred": false,
+            "createTime": "2026-05-19T07:04:55.520951Z",
+            "modifyTime": "2026-05-19T07:04:55.521548Z",
+            "systemPromptName": "",
+            "temporary": false,
+            "mediaTypes": [],
+            "workspaces": [],
+            "taskResult": null
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "userResponse": {
+                "responseId": "b5de6480-99ff-4156-a16b-eac61bd6223b",
+                "message": "what are you doing?",
+                "sender": "human",
+                "createTime": "2026-05-19T07:04:55.540Z",
+                "manual": false,
+                "partial": false,
+                "shared": false,
+                "query": "",
+                "queryType": "",
+                "webSearchResults": [],
+                "xpostIds": [],
+                "xposts": [],
+                "generatedImageUrls": [],
+                "imageAttachments": [],
+                "fileAttachments": [],
+                "cardAttachmentsJson": [],
+                "fileUris": [],
+                "fileAttachmentsMetadata": [],
+                "isControl": false,
+                "steps": [],
+                "imageEditUris": [],
+                "mediaTypes": [],
+                "webpageUrls": [],
+                "metadata": {},
+                "citedWebSearchResults": [],
+                "toolResponses": [],
+                "model": "grok-3",
+                "ragResults": [],
+                "citedRagResults": [],
+                "searchProductResults": [],
+                "connectorSearchResults": [],
+                "collectionSearchResults": [],
+                "streamErrors": [],
+                "citedXposts": [],
+                "citedConnectorSearchResults": [],
+                "citedCollectionSearchResults": [],
+                "chunks": []
+            },
+            "isThinking": false,
+            "isSoftStop": false,
+            "responseId": "b5de6480-99ff-4156-a16b-eac61bd6223b"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "uiLayout": {
+                "reasoningUiLayout": "UNIFIED",
+                "willThinkLong": false,
+                "rolloutIds": []
+            },
+            "isThinking": false,
+            "isSoftStop": false,
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "llmInfo": {
+                "modelHash": "RuNhjEEVdjzeAOdcJJ5tZesiXsCwsgmQ4JukWKeN78A="
+            },
+            "isThinking": false,
+            "isSoftStop": false,
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": "Thinking about your request",
+            "isThinking": true,
+            "isSoftStop": false,
+            "messageTag": "header",
+            "messageStepId": 0,
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "llmInfo": {
+                "modelHash": "RuNhjEEVdjzeAOdcJJ5tZesiXsCwsgmQ4JukWKeN78A="
+            },
+            "isThinking": true,
+            "isSoftStop": false,
+            "messageTag": "header",
+            "messageStepId": 0,
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": "Just",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": " hanging",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": " out",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": " in",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": " the",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": " digital",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": " ether",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": ",",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": " waiting",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": " for",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": " interesting",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": " questions",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": " and",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": " trying",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": " to",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": " be",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": " maximally",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": " helpful",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": " (",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": "and",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": " occasionally",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": " witty",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": ").",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": " \n\n",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": "What's",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": " up",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": " with",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": " you",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": "?",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": " ",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": "🚀",
+            "isThinking": false,
+            "isSoftStop": false,
+            "messageTag": "final",
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "token": "",
+            "isThinking": false,
+            "isSoftStop": true,
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "finalMetadata": {
+                "followUpSuggestions": [
+                    {
+                        "properties": {
+                            "messageType": "TEXT",
+                            "followUpType": "DIVE_DEEPER"
+                        },
+                        "label": "Tell me about your day",
+                        "toolOverrides": {
+                            "imageGen": false
+                        }
+                    },
+                    {
+                        "properties": {
+                            "messageType": "TEXT",
+                            "followUpType": "TANGENTIAL"
+                        },
+                        "label": "What are your hobbies",
+                        "toolOverrides": {
+                            "imageGen": false
+                        }
+                    }
+                ],
+                "feedbackLabels": [],
+                "toolsUsed": null,
+                "disclaimer": ""
+            },
+            "isThinking": false,
+            "isSoftStop": false,
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "response": {
+            "modelResponse": {
+                "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a",
+                "message": "Just hanging out in the digital ether, waiting for interesting questions and trying to be maximally helpful (and occasionally witty). \n\nWhat's up with you? 🚀",
+                "sender": "ASSISTANT",
+                "createTime": "2026-05-19T07:04:59.245Z",
+                "parentResponseId": "b5de6480-99ff-4156-a16b-eac61bd6223b",
+                "manual": false,
+                "partial": false,
+                "shared": false,
+                "query": "",
+                "queryType": "",
+                "webSearchResults": [],
+                "xpostIds": [],
+                "xposts": [],
+                "generatedImageUrls": [],
+                "imageAttachments": [],
+                "fileAttachments": [],
+                "cardAttachmentsJson": [],
+                "fileUris": [],
+                "fileAttachmentsMetadata": [],
+                "isControl": false,
+                "steps": [
+                    {
+                        "text": [
+                            "Thinking about your request"
+                        ],
+                        "tags": [
+                            "header"
+                        ],
+                        "webSearchResults": [],
+                        "xpostIds": [],
+                        "xposts": [],
+                        "toolUsageResults": [],
+                        "ragResults": [],
+                        "connectorSearchResults": [],
+                        "collectionSearchResults": [],
+                        "toolUsageCards": []
+                    }
+                ],
+                "imageEditUris": [],
+                "mediaTypes": [],
+                "webpageUrls": [],
+                "metadata": {
+                    "deepsearchPreset": "",
+                    "llm_info": {
+                        "modelHash": "RuNhjEEVdjzeAOdcJJ5tZesiXsCwsgmQ4JukWKeN78A="
+                    },
+                    "request_metadata": {
+                        "effort": "low",
+                        "mode": "fast",
+                        "model": "grok-3"
+                    },
+                    "request_trace_id": "29ddcdd77928f1d1533bbd846927d8bf",
+                    "ui_layout": {
+                        "reasoningUiLayout": "UNIFIED",
+                        "willThinkLong": false
+                    }
+                },
+                "uiLayout": {
+                    "reasoningUiLayout": "UNIFIED",
+                    "willThinkLong": false,
+                    "rolloutIds": []
+                },
+                "thinkingStartTime": "2026-05-19T07:04:55.599Z",
+                "thinkingEndTime": "2026-05-19T07:04:57.542Z",
+                "citedWebSearchResults": [],
+                "toolResponses": [],
+                "model": "grok-3",
+                "requestMetadata": {
+                    "model": "grok-3",
+                    "mode": "MODEL_MODE_FAST",
+                    "effort": "LOW"
+                },
+                "ragResults": [],
+                "citedRagResults": [],
+                "searchProductResults": [],
+                "connectorSearchResults": [],
+                "collectionSearchResults": [],
+                "streamErrors": [],
+                "citedXposts": [],
+                "citedConnectorSearchResults": [],
+                "citedCollectionSearchResults": [],
+                "chunks": []
+            },
+            "isThinking": false,
+            "isSoftStop": false,
+            "responseId": "7b09ae2d-f51f-41d0-92ee-e58c7b37496a"
+        }
+    }
+}{
+    "result": {
+        "title": {
+            "newTitle": "Hanging Out in Digital Ether"
+        }
+    }
+}

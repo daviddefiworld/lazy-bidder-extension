@@ -43,4 +43,4 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   return handleContentMessage(message, sender, sendResponse);
 });
 
-console.log('LazyBidder: Indeed content script ready');
+console.log('LazyBidder: content script ready');

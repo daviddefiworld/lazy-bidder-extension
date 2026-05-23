@@ -1,6 +1,5 @@
 export interface IndeedOrderParams {
   orderId: string;
-  /** Job rows are stored with this site key (from backend order). */
   sitename?: string;
   query: string;
   location: string;
@@ -27,3 +26,22 @@ export interface IndeedJobResult {
   jobId: string;
   jobDetail: unknown;
 }
+
+export interface ProcessIndeedPagePayload {
+  params: Pick<IndeedOrderParams, 'orderId' | 'query' | 'location' | 'sort' | 'fromage'>;
+  totals: { jobsFound: number; jobsScraped: number };
+  resumeAfterJobId?: string;
+}
+
+export interface ProcessIndeedPageResult {
+  hasNext: boolean;
+  totals: { jobsFound: number; jobsScraped: number };
+}
+
+export type InjectIndeedPageHookMessage = {
+  channel: 'lazybidder';
+  type: 'injectIndeedPageHook';
+  tabId: number;
+};
+
+export type InjectIndeedPageHookResponse = { ok: true } | { ok: false; error: string };
