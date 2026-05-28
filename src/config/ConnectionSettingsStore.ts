@@ -1,4 +1,4 @@
-export const DEFAULT_BACKEND_URL = 'http://localhost:5000';
+export const DEFAULT_BACKEND_URL = 'http://localhost:6000';
 
 const KEY_URL = 'lazybidderBackendUrl';
 const KEY_API = 'lazybidderApiKey';
